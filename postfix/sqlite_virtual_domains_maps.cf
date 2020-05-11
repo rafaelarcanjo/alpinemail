@@ -1,0 +1,2 @@
+dbpath = /var/db/sqlite/mail.sqlite
+query = SELECT 'nomes.space' WHERE 'nomes.space' = '%s'

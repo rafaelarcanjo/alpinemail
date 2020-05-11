@@ -1,0 +1,55 @@
+version: '2'
+services:
+    dns:
+        image: rafaelarcanjo/vps:alpinedns
+        container_name: dns
+        restart: always
+        ports:
+            - "53:53"
+            - "53:53/udp"
+        volumes:
+            - /var/log/:/var/log/
+        networks:
+            - net-interna
+    email:
+        image: rafaelarcanjo/vps:alpinemail
+        container_name: email
+        restart: always
+        ports:
+            - "25:25"
+            - "465:465"
+            - "993:993"
+            - "995:995" 
+        volumes:
+            - /var/vmail/:/var/vmail/ 
+            - /var/log/:/var/log/
+        depends_on:
+            - dns
+        networks:
+            - net-interna    
+    cloud:
+        image: rafaelarcanjo/vps:alpinecloud
+        container_name: cloud
+        restart: always
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - dbnextcloud:/var/lib/nextcloud/data/
+            - /var/log/cloud/:/var/log/nginx/
+            - /var/log/cloud/:/var/log/nextcloud/
+        depends_on:
+            - email
+        networks:
+            - net-interna
+
+volumes:
+    dbnextcloud:               
+
+networks:
+    net-interna:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: 172.28.0.0/16

@@ -1,0 +1,3 @@
+dbpath = /var/db/sqlite/mail.sqlite
+
+query = SELECT user FROM usuarios WHERE user='%s'

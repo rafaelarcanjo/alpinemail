@@ -1,0 +1,13 @@
+driver = sqlite
+
+connect = /var/db/sqlite/mail.sqlite
+
+default_pass_scheme = SHA512-CRYPT
+
+password_query = \
+	SELECT user, password \
+	FROM usuarios WHERE user = '%u'
+
+user_query = \
+	SELECT '/var/vmail/%d/%n' AS home, 102 AS uid, 12 AS gid, 'maildir:/var/vmail/%d/%n' AS mail \
+	FROM usuarios WHERE user = '%u'
